@@ -1,0 +1,13 @@
+html {
+  scroll-behavior: smooth;
+}
+
+/*
+  The template's CSS sizes .banner-area via height: 100%, relying on an
+  unbroken chain of explicit heights up to <html>. #root sits between
+  <body> and the app in the React build, so it needs a height too or
+  the chain breaks and the hero banner collapses to its text height.
+*/
+#root {
+  height: 100%;
+}

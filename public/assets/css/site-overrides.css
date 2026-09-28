@@ -1,0 +1,196 @@
+/* ----------------------------------
+
+Template Name: Agrul - Organic Farm Agriculture Template
+Author: validtheme
+Description:
+Version: 1.0
+
+Main Font    : Manrope
+Main Color   : #6222cc
+
+-------------------------------------
+
+[Typography]
+
+Body copy:    15px 'Manrope', sans-serif
+Header:     36px 'Manrope', sans-serif
+Input, textarea:  16px 'Manrope', sans-serif
+Sidebar heading:  20px 'Manrope', sans-serif
+
+>>> TABLE OF CONTENTS:
+=======================
+        
+    01. Template default css
+        - Animations
+        - General
+        - Section Title
+        - Video Button
+        - Typography
+        - Tables
+        - Forms
+        - Buttons
+        - Pagination
+        - Colors
+    02. Preloader
+    03. Topbar
+	    - Topbar Regular
+        - Topbar With Menu
+    04 Navbar
+        - Navbar Default
+        - Navbar Right Menu
+        - Navbar Sticky
+        - Navbar Center
+    05. Banner
+        - Banner Style One
+        - Banner Style Two
+    06. About Us
+	    - About Style One
+        - About Style Two
+    07. Services
+        - What We Do (Slider)
+        - Services With Image & Icon
+        - Services Single
+    09. Product
+		- Product Light Version
+        - Product Dark Version
+    10. Why Choose Us
+    11. Fun Factor
+    12. Testimonials
+    13. Farmers
+        - Farmer Grid
+        - Farmer Details
+    14. Projects
+        - Project Slider
+        - Prject Grid
+        - Prject Details
+    15. Order Process
+    16. Clients / Brand
+    17. Blog
+        - Standard
+        - Blog Grid
+        - Left Sidebar
+        - Right Sidebar
+        - Single
+    18. Error 404
+    19. Footer
+    20. PHP Contact Form
+    21. Others
+
+*/
+
+/*
+** General Styles for HTML tags
+*/
+
+/* Bionagro Export custom additions */
+.icon-tile {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 90px;
+	height: 90px;
+	margin: 0 auto 20px;
+	border-radius: 50%;
+	background: var(--color-primary);
+	color: var(--white);
+	font-size: 34px;
+}
+
+.product-image .icon-tile {
+	width: 100px;
+	height: 100px;
+	font-size: 38px;
+}
+
+.icon-tile-sm {
+	width: 56px;
+	height: 56px;
+	font-size: 22px;
+	margin: 0;
+}
+
+.feature-strip {
+	padding: 18px 0;
+}
+
+.feature-strip-row {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 30px;
+	width: 100%;
+}
+
+.feature-strip-item {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	color: var(--white);
+}
+
+.feature-strip-item span {
+	font-weight: 700;
+	text-transform: capitalize;
+}
+
+.feature-strip-item:hover .icon-tile-sm {
+	background: var(--color-secondary);
+}
+
+@media (min-width: 1024px) {
+	.banner-style-three-area {
+		height: calc(100vh - 200px);
+	}
+
+	/*
+	  The template's "collapse-mobile" class (added so the mobile drawer
+	  gets its slide-in styling) carries position:fixed; left:-485px with
+	  no responsive scope of its own, which also hid the nav on desktop.
+	  Neutralize it here so desktop falls back to the normal inline nav.
+	*/
+	nav.navbar.validnavs.mobile-sidenav .navbar-collapse.collapse.collapse-mobile {
+		position: static;
+		left: auto;
+		top: auto;
+		width: auto;
+		height: auto;
+		min-height: 0;
+		padding: 0;
+		background: none;
+		overflow: visible;
+		z-index: auto;
+		animation: none;
+		transition: none;
+	}
+}
+
+@media (max-width: 1023px) {
+	.banner-style-three-area {
+		height: calc(100vh - 210px);
+	}
+
+	.feature-strip {
+		padding: 12px 0;
+	}
+
+	.feature-strip-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 20px 16px;
+	}
+
+	.feature-strip-item {
+		gap: 10px;
+	}
+
+	.feature-strip-item span {
+		font-size: 14px;
+	}
+
+	.icon-tile-sm {
+		width: 42px;
+		height: 42px;
+		font-size: 16px;
+	}
+}
