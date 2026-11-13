@@ -15,7 +15,8 @@ export default function Home() {
   const { t } = useI18n();
   return (
     <>
-      <section className="hero" style={{ backgroundImage: `url(${asset("hero-crop-field.jpg")})` }}>
+      <section className="hero">
+        <div className="hero-bg" style={{ backgroundImage: `url(${asset("hero-crop-field.jpg")})` }} aria-hidden="true" />
         <div className="wrap">
           <div className="copy">
             <h1>{t("home.title")}</h1>

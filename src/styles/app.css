@@ -95,9 +95,11 @@ p { margin: 0 0 1em; }
 @media (min-width: 1181px) { .nav .mobile-cta { display: none !important; } }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; background: #dfe6d6 center/cover no-repeat; }
-.hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(246,245,239,.96) 0%, rgba(246,245,239,.85) 42%, rgba(246,245,239,.1) 100%); }
-.hero .wrap { position: relative; padding: 96px 0 104px; }
+.hero { position: relative; background: #dfe6d6; overflow: hidden; }
+.hero-bg { position: absolute; inset: 0; background: center/cover no-repeat; transform-origin: 70% 60%; animation: field-in 24s ease-out both; will-change: transform; }
+@keyframes field-in { from { transform: scale(1); } to { transform: scale(1.18); } }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(246,245,239,.96) 0%, rgba(246,245,239,.85) 42%, rgba(246,245,239,.1) 100%); }
+.hero .wrap { position: relative; z-index: 2; padding: 96px 0 104px; }
 .hero .copy { max-width: 600px; }
 .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 520px; }
 .hero .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
