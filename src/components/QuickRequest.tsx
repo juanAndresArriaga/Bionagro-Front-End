@@ -35,10 +35,10 @@ export default function QuickRequest() {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setState("busy");
-    const body = [`Name: ${name}`, `Phone: ${phone}`, product && `Product: ${product}`].filter(Boolean).join("\n");
+    const intro = `Hi Bionagro, I want to become a partner${product ? ` with ${product}` : ""}.`;
+    const body = [intro, `Name: ${name}`, `Phone: ${phone}`].join("\n");
     try {
-      const r = await sendRequest("quick-popup", { name, phone, product }, `Callback request: ${name}`, `Bionagro callback request
-${body}`, "sms");
+      const r = await sendRequest("quick-popup", { name, phone, product }, `Partner request: ${name}`, body, "sms");
       setState(r === "sent" ? "done" : "idle");
       if (r === "sent") {
         setName("");
