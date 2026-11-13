@@ -1,205 +1,123 @@
 import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import HeroSlider from "../components/HeroSlider";
-import ContactForm from "../components/ContactForm";
-import { testimonials, galleryItems } from "../data/content";
-import { contactInfo } from "../data/nav";
+import { useI18n } from "../i18n";
+import { asset } from "../data/nav";
+import Icon, { type IconName } from "../components/ui/Icon";
+import Reveal from "../components/ui/Reveal";
+
+const features: { icon: IconName; t: "home.f1.t" | "home.f2.t" | "home.f3.t" | "home.f4.t"; d: "home.f1.d" | "home.f2.d" | "home.f3.d" | "home.f4.d" }[] = [
+  { icon: "factory", t: "home.f1.t", d: "home.f1.d" },
+  { icon: "flask", t: "home.f2.t", d: "home.f2.d" },
+  { icon: "leaf", t: "home.f3.t", d: "home.f3.d" },
+  { icon: "headset", t: "home.f4.t", d: "home.f4.d" },
+];
 
 export default function Home() {
+  const { t } = useI18n();
   return (
     <>
-      <HeroSlider />
-
-      {/* Feature Strip */}
-      <div className="feature-strip bg-dark">
-        <div className="container-full">
-          <div className="feature-strip-row">
-            {[
-              { label: "Fertilizers", icon: "fas fa-flask" },
-              { label: "Biostimulants", icon: "fas fa-seedling" },
-              { label: "Soil Conditioners", icon: "fas fa-tint" },
-              { label: "Bio-Control", icon: "fas fa-shield-alt" },
-            ].map((item) => (
-              <Link to="/services" className="feature-strip-item" key={item.label}>
-                <div className="icon-tile icon-tile-sm">
-                  <i className={item.icon} />
-                </div>
-                <span>{item.label}</span>
+      <section className="hero" style={{ backgroundImage: `url(${asset("hero-crop-field.jpg")})` }}>
+        <div className="wrap">
+          <div className="copy">
+            <h1>{t("home.title")}</h1>
+            <span className="swoosh" />
+            <p className="lead">{t("home.lead")}</p>
+            <div className="actions">
+              <Link to="/distributors" className="btn">
+                {t("nav.distributor")} <Icon name="arrow" />
               </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Intro */}
-      <div className="default-padding text-center">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-lg-8">
-              <h4 className="sub-title">Sustainability, Made for Your Crop</h4>
-              <h2 className="title mb-25">Better Formulas Begin with Understanding Your Fields</h2>
-              <p>
-                Bionagro Export works with growers and distributors to deliver fertilizers, biostimulants, and soil
-                solutions tailored to each crop, climate, and production goal. Together, we build practical,
-                environmentally responsible programs that nurture healthier soil, use resources wisely, and help
-                every harvest reach its potential.
-              </p>
-              <Link to="/about-us" className="mt-15">
-                <span>
-                  <i className="fas fa-arrow-right" /> DISCOVER OUR APPROACH
+              <Link to="/research" className="btn outline">
+                <Icon name="play" /> {t("home.watch")}
+              </Link>
+            </div>
+            <div className="trust">
+              {(["home.trust1", "home.trust2", "home.trust3"] as const).map((k) => (
+                <span key={k}>
+                  <Icon name="check" /> {t(k)}
                 </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="strip">
+        <div className="wrap">
+          {features.map((f) => (
+            <div className="item" key={f.t}>
+              <Icon name={f.icon} className="big" />
+              <h3>{t(f.t)}</h3>
+              <p>{t(f.d)}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section alt">
+        <div className="wrap tech-teaser">
+          <Reveal>
+            <span className="eyebrow">{t("nav.tech")}</span>
+            <h2>{t("about.h")}</h2>
+            <p className="muted">{t("home.tech.d")}</p>
+            <Link to="/technology" className="link">
+              {t("home.tech.cta")} <Icon name="arrow" />
+            </Link>
+          </Reveal>
+          <img src={asset("bi-on.svg")} alt="Bi-on" width="360" height="160" />
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap">
+          <Reveal className="center">
+            <h2>{t("home.sol.h")}</h2>
+            <span className="swoosh" />
+            <p className="muted">{t("home.sol.d")}</p>
+          </Reveal>
+          <Reveal>
+            <div className="grid c2" style={{ marginTop: 32 }}>
+              <Link to="/products?type=foliar" className="card">
+                <div className="media" style={{ backgroundImage: `url(${asset("hero-precision-ag.jpg")})` }} />
+                <div className="solution">
+                  <Icon name="leaf" className="big" />
+                  <div>
+                    <h3>{t("home.sol1.t")}</h3>
+                    <p>{t("home.sol1.d")}</p>
+                  </div>
+                  <Icon name="arrow" />
+                </div>
+              </Link>
+              <Link to="/products?type=soil" className="card">
+                <div className="media" style={{ backgroundImage: `url(${asset("about-vineyard-rows.jpg")})` }} />
+                <div className="solution">
+                  <Icon name="layers" className="big" />
+                  <div>
+                    <h3>{t("home.sol2.t")}</h3>
+                    <p>{t("home.sol2.d")}</p>
+                  </div>
+                  <Icon name="arrow" />
+                </div>
               </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
-      </div>
+      </section>
 
-      {/* Gallery */}
-      <div className="gallery-style-one-area default-padding bg-gray">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-8 offset-lg-2">
-              <div className="site-heading text-center">
-                <h5 className="sub-title">Tailored by Crop</h5>
-                <h2 className="title">Solutions Designed for Real Fields</h2>
-                <div className="devider" />
+      <section className="section" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <Reveal>
+            <div className="banner" style={{ backgroundImage: `url(${asset("hero-precision-ag.jpg")})` }}>
+              <div className="inner">
+                <span className="eyebrow">{t("res.eyebrow")}</span>
+                <h2>{t("res.title")}</h2>
+                <p>{t("home.res.d")}</p>
+                <Link to="/research" className="btn light">
+                  {t("home.res.cta")} <Icon name="arrow" />
+                </Link>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
-        <div className="container">
-          <div className="row">
-            <div className="col-xl-12">
-              <Swiper
-                modules={[Pagination]}
-                pagination={{ clickable: true }}
-                spaceBetween={20}
-                slidesPerView={1}
-                breakpoints={{ 768: { slidesPerView: 2 }, 1200: { slidesPerView: 3 } }}
-                className="carousel-style-one"
-              >
-                {galleryItems.map((item) => (
-                  <SwiperSlide key={item.title}>
-                    <div className="gallery-style-one">
-                      <img src={item.image} alt={item.title} />
-                      <div className="overlay">
-                        <span>{item.category}</span>
-                        <h4>
-                          <Link to="/services">{item.title}</Link>
-                        </h4>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Testimonials */}
-      <div className="testimonials-area default-padding" style={{ backgroundImage: "url(assets/img/shape/23.png)" }}>
-        <div className="container">
-          <div className="row align-center">
-            <div className="col-lg-5">
-              <div className="testimonial-info text-center">
-                <h4>Growing Together</h4>
-              </div>
-            </div>
-            <div className="col-lg-6 offset-lg-1">
-              <Swiper
-                modules={[Pagination, Autoplay]}
-                pagination={{ clickable: true }}
-                autoplay={{ delay: 5000, disableOnInteraction: false }}
-                loop
-                className="testimonial-carousel testimonial-style-one"
-              >
-                {testimonials.map((t) => (
-                  <SwiperSlide key={t.name}>
-                    <div className="testimonial-style-two">
-                      <div className="item">
-                        <div className="content">
-                          <p>&ldquo;{t.quote}&rdquo;</p>
-                        </div>
-                        <div className="provider">
-                          <div className="info">
-                            <h4>{t.name}</h4>
-                            <span>{t.role}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Contact */}
-      <div className="contact-area bg-gray default-padding" style={{ backgroundImage: "url(assets/img/shape/28.png)" }}>
-        <div className="container">
-          <div className="row align-center">
-            <div className="col-tact-stye-one col-lg-7">
-              <div className="contact-form-style-one mb-md-50">
-                <h5 className="sub-title">Let's Grow Together</h5>
-                <h2 className="heading">Tell Us About Your Crop or Partnership</h2>
-                <ContactForm />
-              </div>
-            </div>
-
-            <div className="col-tact-stye-one col-lg-5 pl-60 pl-md-15 pl-xs-15">
-              <div className="contact-style-one-info">
-                <h2>
-                  Contact <span>Information</span>
-                </h2>
-                <p>
-                  Looking for a solution tailored to your crop or interested in becoming a distribution partner?
-                  Let's start the conversation.
-                </p>
-                <p>
-                  <Link to="/track-request" className="btn btn-theme btn-sm radius">
-                    Track Your Request
-                  </Link>
-                </p>
-                <ul>
-                  <li>
-                    <div className="icon">
-                      <i className="fas fa-phone-alt" />
-                    </div>
-                    <div className="content">
-                      <h5 className="title">Hotline</h5>
-                      <a href="#hotline">{contactInfo.phone}</a>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon">
-                      <i className="fas fa-map-marker-alt" />
-                    </div>
-                    <div className="info">
-                      <h5 className="title">Our Location</h5>
-                      <p>{contactInfo.address}</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="icon">
-                      <i className="fas fa-envelope-open-text" />
-                    </div>
-                    <div className="info">
-                      <h5 className="title">Official Email</h5>
-                      <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
     </>
   );
 }

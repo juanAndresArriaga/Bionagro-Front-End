@@ -1,11 +1,12 @@
 export const socialLinks = {
   facebook: "https://www.facebook.com/Bionagrogt",
   instagram: "https://www.instagram.com/bionagro/",
-  whatsapp: "https://wa.link/22aqu0",
+  text: "sms:+50232507837",
 };
 
 export const contactInfo = {
-  address: "[Your Address Here]",
-  phone: "[Your Phone Number]",
-  email: "info@bionagro.com",
+  phone: "+502 3250-7837",
+  email: "Produccion@bionagrosa.com",
 };
+
+export const asset = (path: string) => `${import.meta.env.BASE_URL}assets/img/${path}`;

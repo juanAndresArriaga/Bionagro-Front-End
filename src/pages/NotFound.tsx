@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
+import { useI18n } from "../i18n";
 
 export default function NotFound() {
+  const { t } = useI18n();
   return (
-    <div className="default-padding text-center">
-      <div className="container">
-        <h1 style={{ fontSize: 96, color: "var(--color-primary)" }}>404</h1>
-        <h3 className="mb-15">Page Not Found</h3>
-        <p className="mb-25">The page you're looking for doesn't exist or has been moved.</p>
-        <Link to="/" className="btn btn-theme btn-md radius">
-          Back to Home
-        </Link>
+    <section className="section center">
+      <div className="wrap">
+        <p className="big-stat">404</p>
+        <h2>{t("nf.title")}</h2>
+        <p className="muted">{t("nf.d")}</p>
+        <Link to="/" className="btn">{t("nf.back")}</Link>
       </div>
-    </div>
+    </section>
   );
 }
