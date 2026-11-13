@@ -449,3 +449,19 @@ table.data td small { display: block; color: var(--muted); }
 .sec-nav button[aria-pressed="true"] { background: var(--forest); color: #fff; }
 .head.center .head-in { display: inline-block; text-align: left; }
 .head.center .head-in h2 { margin-bottom: 28px; }
+
+/* ---------- Distributors hero with form ---------- */
+.dist-hero .wrap { display: grid; grid-template-columns: 1fr 1.05fr; gap: 48px; align-items: start; }
+.dist-hero h1 { font-size: clamp(2rem, 4vw, 3rem); }
+.dist-hero p { max-width: 520px; }
+.perk-list { list-style: none; padding: 0; margin: 28px 0; display: grid; gap: 16px; }
+.perk-list li { display: flex; gap: 14px; align-items: flex-start; }
+.perk-list .ico { color: var(--lime); width: 1.6em; height: 1.6em; margin-top: 2px; }
+.perk-list b { display: block; color: #fff; }
+.perk-list span { font-size: .92rem; opacity: .8; }
+.contact-list.light { margin: 0; color: #fff; }
+.contact-list.light .ico { color: var(--lime); }
+.contact-list.light a:hover { color: var(--lime); }
+.hero-form { color: var(--charcoal); }
+.hero-form h2 { font-size: 1.5rem; margin-bottom: 4px; }
+@media (max-width: 900px) { .dist-hero .wrap { grid-template-columns: 1fr; } }

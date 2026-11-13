@@ -29,7 +29,7 @@ export const plant: { d: L; points: L[]; sizes: { n: string; v: string }[] } = {
     es: "Formulamos, envasamos y despachamos desde nuestra propia planta. Cada lote se revisa antes de envasar (pH, densidad y apariencia) y cada envase lleva su número de lote.",
   },
   points: [
-    { en: "MAGA registered formulation plant", es: "Planta formuladora registrada en MAGA" },
+    { en: "Own formulation plant, every batch checked before filling", es: "Planta formuladora propia, cada lote revisado antes de envasar" },
     { en: "Barcode traceability by batch", es: "Trazabilidad por lote con código de barras" },
     { en: "1 gal – IBC racked stock, ready to ship", es: "1 gal – IBC en inventario de racks, listo para despachar" },
     { en: "2026 expansion: larger tanks and a new filling line", es: "Ampliación 2026: tanques más grandes y nueva línea de llenado" },

@@ -39,29 +39,71 @@ export default function Distributors() {
 
   return (
     <>
-      <section className="page-head">
+      <section className="page-head dist-hero" id="request">
         <div className="wrap">
-          <span className="eyebrow">{t("dist.eyebrow")}</span>
-          <h1>{tr(hero.h)}</h1>
-          <p>{tr(hero.d)}</p>
-          <div className="btn-row" style={{ marginTop: 24 }}>
-            <a href="#request" className="btn light">{t("dist.start")} <Icon name="arrow" /></a>
-            <a href="#private-label" className="btn ghost">{t("dist.pl")}</a>
+          <div>
+            <span className="eyebrow">{t("dist.eyebrow")}</span>
+            <h1>{tr(hero.h)}</h1>
+            <p>{tr(hero.d)}</p>
+            <ul className="perk-list">
+              {perks.map((p) => (
+                <li key={p.t.en}>
+                  <Icon name={p.icon} />
+                  <div><b>{tr(p.t)}</b><span>{tr(p.d)}</span></div>
+                </li>
+              ))}
+            </ul>
+            <ul className="contact-list light">
+              <li><Icon name="mail" /><div><a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a></div></li>
+              <li><Icon name="phone" /><div><a href={socialLinks.text}>{t("contact.phone")} {contactInfo.phone}</a></div></li>
+              <li><Icon name="pin" /><div>{t("contact.locv")}</div></li>
+            </ul>
           </div>
+            <form className="panel hero-form" onSubmit={onSubmit} lang={lang}>
+              <h2>{t("dist.form.h")}</h2>
+              <p className="muted tiny">{t("dist.form.d")}</p>
+              <label className="field"><input value={f.name} onChange={set("name")} placeholder={t("dist.name")} aria-label={t("dist.name")} required /></label>
+              <label className="field"><input value={f.company} onChange={set("company")} placeholder={t("dist.company")} aria-label={t("dist.company")} required /></label>
+              <label className="field"><Icon name="mail" /><input type="email" value={f.email} onChange={set("email")} placeholder={t("dist.email")} aria-label={t("dist.email")} required /></label>
+              <label className="field"><input type="tel" value={f.phone} onChange={set("phone")} placeholder={t("dist.phone")} aria-label={t("dist.phone")} /></label>
+              <label className="field"><input value={f.where} onChange={set("where")} placeholder={t("dist.where")} aria-label={t("dist.where")} required /></label>
+              <label className="field select">
+                <select value={f.type} onChange={set("type")} aria-label={t("dist.type")} required>
+                  <option value="">{t("dist.type")}</option>
+                  {businessTypes.map((x) => <option key={x.en} value={x.en}>{tr(x)}</option>)}
+                </select>
+              </label>
+              <label className="field select">
+                <select value={f.need} onChange={set("need")} aria-label={t("dist.need")} required>
+                  <option value="">{t("dist.need")}</option>
+                  {needs.map((x) => <option key={x.en} value={x.en}>{tr(x)}</option>)}
+                </select>
+              </label>
+              <label className="field select">
+                <select value={f.volume} onChange={set("volume")} aria-label={t("dist.volume")}>
+                  <option value="">{t("dist.volume")}</option>
+                  {volumes.map((x) => <option key={x.en} value={x.en}>{tr(x)}</option>)}
+                </select>
+              </label>
+  
+              <fieldset className="pick">
+                <legend>{t("dist.products")}</legend>
+                {products.map((p) => (
+                  <button key={p.slug} type="button" aria-pressed={picked.includes(p.name)} onClick={() => toggle(p.name)}>{p.name}</button>
+                ))}
+              </fieldset>
+  
+              <label className="field"><textarea rows={4} value={f.msg} onChange={set("msg")} placeholder={t("dist.msg")} aria-label={t("dist.msg")} /></label>
+  
+              <div className="btn-row">
+                <button type="submit" className="btn">{t("dist.send")} <Icon name="arrow" /></button>
+                <a className="btn lime" href={wa}><Icon name="chat" /> {t("dist.wa")}</a>
+              </div>
+              <p className="muted tiny" style={{ marginTop: 12 }}>{t("dist.note")}</p>
+            </form>
         </div>
       </section>
 
-      <section className="strip">
-        <div className="wrap three">
-          {perks.map((p) => (
-            <div className="item" key={p.t.en}>
-              <Icon name={p.icon} className="big" />
-              <h3>{tr(p.t)}</h3>
-              <p>{tr(p.d)}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <section className="section">
         <div className="wrap">
@@ -122,61 +164,6 @@ export default function Distributors() {
         </div>
       </section>
 
-      <section className="section alt" id="request">
-        <div className="wrap two">
-          <div>
-            <span className="eyebrow">{t("dist.form.k")}</span>
-            <h2>{t("dist.form.h")}</h2>
-            <p className="muted">{t("dist.form.d")}</p>
-            <ul className="contact-list">
-              <li><Icon name="mail" /><div><a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a></div></li>
-              <li><Icon name="phone" /><div><a href={socialLinks.text}>{t("contact.phone")} {contactInfo.phone}</a></div></li>
-              <li><Icon name="pin" /><div>{t("contact.locv")}</div></li>
-            </ul>
-          </div>
-
-          <form className="panel" onSubmit={onSubmit} lang={lang}>
-            <label className="field"><input value={f.name} onChange={set("name")} placeholder={t("dist.name")} aria-label={t("dist.name")} required /></label>
-            <label className="field"><input value={f.company} onChange={set("company")} placeholder={t("dist.company")} aria-label={t("dist.company")} required /></label>
-            <label className="field"><Icon name="mail" /><input type="email" value={f.email} onChange={set("email")} placeholder={t("dist.email")} aria-label={t("dist.email")} required /></label>
-            <label className="field"><input type="tel" value={f.phone} onChange={set("phone")} placeholder={t("dist.phone")} aria-label={t("dist.phone")} /></label>
-            <label className="field"><input value={f.where} onChange={set("where")} placeholder={t("dist.where")} aria-label={t("dist.where")} required /></label>
-            <label className="field select">
-              <select value={f.type} onChange={set("type")} aria-label={t("dist.type")} required>
-                <option value="">{t("dist.type")}</option>
-                {businessTypes.map((x) => <option key={x.en} value={x.en}>{tr(x)}</option>)}
-              </select>
-            </label>
-            <label className="field select">
-              <select value={f.need} onChange={set("need")} aria-label={t("dist.need")} required>
-                <option value="">{t("dist.need")}</option>
-                {needs.map((x) => <option key={x.en} value={x.en}>{tr(x)}</option>)}
-              </select>
-            </label>
-            <label className="field select">
-              <select value={f.volume} onChange={set("volume")} aria-label={t("dist.volume")}>
-                <option value="">{t("dist.volume")}</option>
-                {volumes.map((x) => <option key={x.en} value={x.en}>{tr(x)}</option>)}
-              </select>
-            </label>
-
-            <fieldset className="pick">
-              <legend>{t("dist.products")}</legend>
-              {products.map((p) => (
-                <button key={p.slug} type="button" aria-pressed={picked.includes(p.name)} onClick={() => toggle(p.name)}>{p.name}</button>
-              ))}
-            </fieldset>
-
-            <label className="field"><textarea rows={4} value={f.msg} onChange={set("msg")} placeholder={t("dist.msg")} aria-label={t("dist.msg")} /></label>
-
-            <div className="btn-row">
-              <button type="submit" className="btn">{t("dist.send")} <Icon name="arrow" /></button>
-              <a className="btn lime" href={wa}><Icon name="chat" /> {t("dist.wa")}</a>
-            </div>
-            <p className="muted tiny" style={{ marginTop: 12 }}>{t("dist.note")}</p>
-          </form>
-        </div>
-      </section>
     </>
   );
 }

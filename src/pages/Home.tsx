@@ -8,7 +8,7 @@ const features: { icon: IconName; t: "home.f1.t" | "home.f2.t" | "home.f3.t" | "
   { icon: "factory", t: "home.f1.t", d: "home.f1.d" },
   { icon: "flask", t: "home.f2.t", d: "home.f2.d" },
   { icon: "leaf", t: "home.f3.t", d: "home.f3.d" },
-  { icon: "headset", t: "home.f4.t", d: "home.f4.d" },
+  { icon: "compass", t: "home.f4.t", d: "home.f4.d" },
 ];
 
 export default function Home() {
