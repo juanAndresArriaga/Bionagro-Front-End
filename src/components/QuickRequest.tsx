@@ -37,7 +37,8 @@ export default function QuickRequest() {
     setState("busy");
     const body = [`Name: ${name}`, `Phone: ${phone}`, product && `Product: ${product}`].filter(Boolean).join("\n");
     try {
-      const r = await sendRequest("quick-popup", { name, phone, product }, `Callback request: ${name}`, body);
+      const r = await sendRequest("quick-popup", { name, phone, product }, `Callback request: ${name}`, `Bionagro callback request
+${body}`, "sms");
       setState(r === "sent" ? "done" : "idle");
       if (r === "sent") {
         setName("");
