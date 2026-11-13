@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useI18n, type Key } from "../i18n";
-import { contactInfo } from "../data/nav";
+import { sendRequest } from "../lib/sendRequest";
 import { products } from "../data/products";
 import { businessTypes, needs, volumes } from "../data/distributors";
 import Icon from "./ui/Icon";
@@ -31,16 +31,27 @@ export default function RequestForm({ initialProducts = [], initialNeed = "", re
     f.msg && `\n${f.msg}`,
   ].filter(Boolean).join("\n");
 
-  // No backend yet: hand the request to the visitor's mail client.
-  const onSubmit = (e: FormEvent) => {
+  // Delivered through sendRequest: a form endpoint when configured, otherwise the visitor's email app.
+  const [sent, setSent] = useState(false);
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    window.location.href = `mailto:${contactInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    try {
+      const r = await sendRequest("full-form", { ...f, products: picked.join(", "), reference }, subject, body);
+      if (r === "sent") {
+        setSent(true);
+        setF({ ...empty });
+        setPicked([]);
+      }
+    } catch {
+      /* falls back to the mail app inside sendRequest */
+    }
   };
 
   return (
           <form className="panel hero-form" onSubmit={onSubmit} lang={lang}>
             <h2>{t("dist.form.h")}</h2>
             <p className="muted tiny">{t("dist.form.d")}</p>
+            {sent && <p className="note" role="status"><Icon name="check" /> {t("quick.ok")}</p>}
             <label className="field"><input value={f.name} onChange={set("name")} placeholder={t("dist.name")} aria-label={t("dist.name")} required /></label>
             <label className="field"><input value={f.company} onChange={set("company")} placeholder={t("dist.company")} aria-label={t("dist.company")} required /></label>
             <label className="field"><Icon name="mail" /><input type="email" value={f.email} onChange={set("email")} placeholder={t("dist.email")} aria-label={t("dist.email")} required /></label>

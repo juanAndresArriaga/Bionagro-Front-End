@@ -471,3 +471,12 @@ table.data td small { display: block; color: var(--muted); }
 .hero-form { color: var(--charcoal); }
 .hero-form h2 { font-size: 1.5rem; margin-bottom: 4px; }
 @media (max-width: 900px) { .dist-hero .wrap { grid-template-columns: 1fr; } }
+
+/* ---------- Quick request pop-up ---------- */
+.chat { cursor: pointer; font: inherit; }
+.quick { border: 0; padding: 26px; border-radius: var(--radius); width: min(420px, calc(100% - 32px)); box-shadow: 0 24px 60px rgba(18,61,45,.3); color: var(--charcoal); }
+.quick::backdrop { background: rgba(18,61,45,.55); }
+.quick h2 { font-size: 1.5rem; margin-bottom: 6px; padding-right: 36px; }
+.quick-x { position: absolute; top: 12px; right: 12px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: #fff; display: grid; place-items: center; cursor: pointer; color: var(--forest); }
+.quick-ok { text-align: center; display: grid; justify-items: center; gap: 8px; padding: 10px 0; }
+.quick .btn:disabled { opacity: .6; cursor: wait; }

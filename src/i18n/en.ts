@@ -247,4 +247,13 @@ export const en = {
   "prod.res.guide": "Application Guide (rates per acre)",
   "prod.res.trial": "Field Trial Results",
   "prod.res.note": "Samples subject to review.",
+  "quick.title": "Request a callback",
+  "quick.d": "Leave your name and number and we will get back to you.",
+  "quick.name": "Your name",
+  "quick.phone": "Phone number",
+  "quick.product": "Product (optional)",
+  "quick.send": "Send",
+  "quick.ok": "Thanks! We will contact you soon.",
+  "quick.close": "Close",
+  "quick.full": "Need more options? Use the full form",
 };

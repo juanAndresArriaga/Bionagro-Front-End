@@ -249,4 +249,13 @@ export const es: Record<keyof typeof en, string> = {
   "prod.res.guide": "Guía de aplicación (dosis por acre)",
   "prod.res.trial": "Resultados de ensayos de campo",
   "prod.res.note": "Muestras sujetas a revisión.",
+  "quick.title": "Solicite una llamada",
+  "quick.d": "Deje su nombre y número y le contactamos.",
+  "quick.name": "Su nombre",
+  "quick.phone": "Número de teléfono",
+  "quick.product": "Producto (opcional)",
+  "quick.send": "Enviar",
+  "quick.ok": "¡Gracias! Le contactaremos pronto.",
+  "quick.close": "Cerrar",
+  "quick.full": "¿Necesita más opciones? Use el formulario completo",
 };
