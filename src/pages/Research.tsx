@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
-import { asset, socialLinks } from "../data/nav";
-import { close, DOSSIER, hero, jar, lemon, refs, sections, statusLabel, statusOne, studies, type Status } from "../data/science";
+import { asset } from "../data/nav";
+import { close, hero, jar, lemon, refs, sections, statusLabel, statusOne, studies, type Status } from "../data/science";
 import Icon from "../components/ui/Icon";
 import Reveal from "../components/ui/Reveal";
 
@@ -178,8 +178,8 @@ export default function Research() {
                     </div>
                     <h3>{tr(s.t)}</h3>
                     <p>{tr(s.d)}</p>
-                    {s.cta && (s.cta.external ? (
-                      <a href={s.cta.to} target="_blank" rel="noreferrer" className="link">{tr(s.cta.label)} <Icon name="arrow" /></a>
+                    {s.cta && (s.cta.request ? (
+                      <Link to={`/contact?product=${encodeURIComponent(tr(s.t))}&intent=quote`} className="link">{tr(s.cta.label)} <Icon name="arrow" /></Link>
                     ) : (
                       <button type="button" className="link plain" onClick={() => go(s.cta!.to)}>{tr(s.cta.label)} <Icon name="arrow" /></button>
                     ))}
@@ -199,7 +199,6 @@ export default function Research() {
             <span className="eyebrow">{tr(refs.k)}</span>
             <h2>{tr(refs.h)}</h2>
             <p className="muted">{tr(refs.d)}</p>
-            <a href={DOSSIER} target="_blank" rel="noreferrer" className="link">{tr(refs.open)} <Icon name="arrow" /></a>
           </div>
           <ol className="refs-list">
             {refs.list.map((r) => <li key={r}>{r}</li>)}
@@ -219,7 +218,6 @@ export default function Research() {
             </div>
             <div className="btn-row">
               <Link to="/contact?product=Research&intent=sample" className="btn light">{tr(close.cta)} <Icon name="arrow" /></Link>
-              <a href={socialLinks.text} className="btn ghost"><Icon name="chat" /> {t("contact.wa")}</a>
             </div>
           </div>
         </div>

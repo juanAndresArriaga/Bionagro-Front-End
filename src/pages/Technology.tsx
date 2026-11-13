@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
-import { asset, socialLinks } from "../data/nav";
+import { asset } from "../data/nav";
 import { hardness, howCards, nutrients, refs } from "../data/technology";
 import Icon from "../components/ui/Icon";
 import Reveal from "../components/ui/Reveal";
@@ -171,7 +171,6 @@ export default function Technology() {
             </div>
             <div className="btn-row">
               <Link to="/contact" className="btn light">{t("tech.lab.cta")} <Icon name="arrow" /></Link>
-              <a href={socialLinks.text} className="btn ghost"><Icon name="chat" /> {t("contact.wa")}</a>
             </div>
           </div>
         </div>

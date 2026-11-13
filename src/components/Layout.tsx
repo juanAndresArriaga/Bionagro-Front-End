@@ -1,10 +1,9 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Icon from "./ui/Icon";
 import { useI18n } from "../i18n";
-import { socialLinks } from "../data/nav";
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -21,9 +20,9 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
-      <a className="chat" href={socialLinks.text} aria-label={t("chat")}>
+      <Link className="chat" to="/contact" aria-label={t("chat")}>
         <Icon name="chat" /> <span>{t("chat")}</span>
-      </a>
+      </Link>
     </>
   );
 }

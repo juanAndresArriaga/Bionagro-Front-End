@@ -118,7 +118,7 @@ export const en = {
 
   "contact.eyebrow": "Contact",
   "contact.title": "Let's talk about your crops.",
-  "contact.lead": "Request prices and samples, or ask about becoming a distributor.",
+  "contact.lead": "Ask a question, request a product, prices or samples, or tell us you want to become a distributor. One form for all of it.",
   "contact.name": "Name",
   "contact.email": "Email",
   "contact.msg": "Tell us about your crop, market or partnership goals",
@@ -134,7 +134,7 @@ export const en = {
   "footer.contact": "Contact",
   "footer.follow": "Follow",
   "footer.legal": "Bionagro S.A. Sample site, November 2026.",
-  "chat": "Text our team",
+  "chat": "Contact us",
 
   "nf.title": "Page not found",
   "nf.d": "The page you're looking for doesn't exist or has been moved.",

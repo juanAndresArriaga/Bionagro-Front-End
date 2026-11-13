@@ -1,26 +1,19 @@
-import { useState, type FormEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n";
 import { contactInfo, socialLinks } from "../data/nav";
+import { products } from "../data/products";
 import Icon from "../components/ui/Icon";
+import RequestForm from "../components/RequestForm";
 
 export default function ContactUs() {
   const { t } = useI18n();
   const [params] = useSearchParams();
-  const product = params.get("product");
+  const product = params.get("product") ?? "";
   const intent = params.get("intent");
-  const subject = product ? `${intent === "sample" ? "Sample request" : "Quote request"}: ${product}` : "Bionagro inquiry";
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [msg, setMsg] = useState("");
-
-  // No backend yet: hand the message to the visitor's mail client.
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const body = `${msg}\n\n${name}\n${email}`;
-    window.location.href = `mailto:${contactInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
+  // A product link pre-selects it; anything else (for example a study title) is carried along as a reference.
+  const known = products.find((p) => p.name === product);
+  const need = intent === "sample" ? "Samples" : intent === "quote" ? "Price list" : "";
 
   return (
     <>
@@ -34,23 +27,6 @@ export default function ContactUs() {
 
       <section className="section">
         <div className="wrap two">
-          <form className="panel" onSubmit={onSubmit}>
-            {product && <p className="chip lime">{subject}</p>}
-            <label className="field">
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("contact.name")} aria-label={t("contact.name")} required />
-            </label>
-            <label className="field">
-              <Icon name="mail" />
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("contact.email")} aria-label={t("contact.email")} required />
-            </label>
-            <label className="field">
-              <textarea rows={5} value={msg} onChange={(e) => setMsg(e.target.value)} placeholder={t("contact.msg")} aria-label={t("contact.msg")} required />
-            </label>
-            <button type="submit" className="btn">
-              {t("contact.send")} <Icon name="arrow" />
-            </button>
-          </form>
-
           <div>
             <ul className="contact-list">
               <li>
@@ -75,10 +51,14 @@ export default function ContactUs() {
                 </div>
               </li>
             </ul>
-            <a className="btn lime" href={socialLinks.text}>
-              <Icon name="chat" /> {t("contact.wa")}
-            </a>
           </div>
+
+          <RequestForm
+            key={product + (intent ?? "")}
+            initialProducts={known ? [known.name] : []}
+            initialNeed={need}
+            reference={known ? "" : product}
+          />
         </div>
       </section>
     </>

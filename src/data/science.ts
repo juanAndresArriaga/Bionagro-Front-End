@@ -93,9 +93,7 @@ export const jar = {
   ] as { t: L; d: L }[],
 };
 
-export const DOSSIER = "https://claude.ai/artifact/3pe1xzH1mdSjWbKs1qLUjp";
-
-export type Study = { status: Status; kind: L; t: L; d: L; cta?: { label: L; to: string; external?: boolean } };
+export type Study = { status: Status; kind: L; t: L; d: L; cta?: { label: L; to: string; request?: boolean } };
 
 export const studies: Study[] = [
   {
@@ -110,14 +108,14 @@ export const studies: Study[] = [
     kind: { en: "Chemical model", es: "Modelo químico" },
     t: { en: "Calcium speciation of Ca", es: "Especiación del calcio de Ca" },
     d: { en: "Over 85 % of the calcium stays as free Ca²⁺ at 1:200 dilution.", es: "Más del 85 % del calcio queda como Ca²⁺ libre a dilución 1:200." },
-    cta: { label: { en: "Read", es: "Leer" }, to: DOSSIER, external: true },
+    cta: { label: { en: "Request the full study", es: "Solicitar el estudio completo" }, to: "", request: true },
   },
   {
     status: "done",
     kind: { en: "Article", es: "Artículo" },
     t: { en: "Why little calcium reaches the fruit", es: "Por qué el calcio llega poco al fruto" },
     d: { en: "A review of peer-reviewed literature on calcium transport.", es: "Revisión de literatura revisada por pares sobre transporte de calcio." },
-    cta: { label: { en: "Read", es: "Leer" }, to: DOSSIER, external: true },
+    cta: { label: { en: "Request the full study", es: "Solicitar el estudio completo" }, to: "", request: true },
   },
   {
     status: "prep",
@@ -149,12 +147,11 @@ export const studies: Study[] = [
 
 export const refs = {
   k: { en: "Peer-reviewed literature", es: "Literatura revisada por pares" },
-  h: { en: "References in the Ca dossier", es: "Referencias del expediente de Ca" },
+  h: { en: "References", es: "Referencias" },
   d: {
     en: "Calcium travels only in the xylem, with the water the plant transpires, and is not redistributed through the phloem; that is why foliar calcium has to land on the fruit at the stage when it needs it.",
     es: "El calcio viaja solo por el xilema con el agua que transpira la planta y no se redistribuye por el floema; por eso el calcio foliar tiene que caer en el fruto en la etapa en que lo necesita.",
   },
-  open: { en: "Open the dossier", es: "Abrir el expediente" },
   list: [
     "White, P. J. & Broadley, M. R. (2003). Calcium in plants. Annals of Botany, 92(4), 487–511.",
     "Hocking, B., Tyerman, S. D., Burton, R. A. & Gilliham, M. (2016). Fruit calcium: transport and physiology. Frontiers in Plant Science, 7, 569.",

@@ -120,7 +120,7 @@ export const es: Record<keyof typeof en, string> = {
 
   "contact.eyebrow": "Contacto",
   "contact.title": "Hablemos de sus cultivos.",
-  "contact.lead": "Solicite precios y muestras, o consulte cómo ser distribuidor.",
+  "contact.lead": "Haga una pregunta, solicite un producto, precios o muestras, o díganos que quiere ser distribuidor. Un solo formulario para todo.",
   "contact.name": "Nombre",
   "contact.email": "Correo",
   "contact.msg": "Cuéntenos sobre su cultivo, mercado o metas de alianza",
@@ -136,7 +136,7 @@ export const es: Record<keyof typeof en, string> = {
   "footer.contact": "Contacto",
   "footer.follow": "Síganos",
   "footer.legal": "Bionagro S.A. Sitio de muestra, noviembre 2026.",
-  "chat": "Escriba a nuestro equipo",
+  "chat": "Contáctenos",
 
   "nf.title": "Página no encontrada",
   "nf.d": "La página que busca no existe o fue movida.",
