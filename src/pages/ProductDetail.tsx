@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useI18n, type Key } from "../i18n";
 import { getProduct } from "../data/products";
+import { details } from "../data/productDetails";
 import { asset } from "../data/nav";
+import { usePageTitle } from "../lib/usePageTitle";
 import Icon, { type IconName } from "../components/ui/Icon";
 import Jug from "../components/ui/Jug";
 
@@ -20,7 +22,10 @@ export default function ProductDetail() {
   const { slug } = useParams();
   const { t, tr } = useI18n();
   const [tab, setTab] = useState<Tab>("overview");
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const p = getProduct(slug);
+  const d = slug ? details[slug] : undefined;
+  usePageTitle(p ? p.name : t("prod.notfound"));
 
   if (!p) {
     return (
@@ -35,6 +40,29 @@ export default function ProductDetail() {
 
   const ask = `/contact?product=${encodeURIComponent(p.name)}`;
 
+  // Arrow keys / Home / End move between tabs, following the WAI-ARIA tabs pattern.
+  const onTabKey = (e: KeyboardEvent, i: number) => {
+    const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+    if (next === undefined) return;
+    e.preventDefault();
+    const j = (next + tabs.length) % tabs.length;
+    setTab(tabs[j]);
+    tabRefs.current[j]?.focus();
+  };
+
+  const simpleAnalysis = (
+    <table className="data">
+      <thead>
+        <tr><th>{t("prod.nutrient")}</th><th>{t("prod.content")}</th></tr>
+      </thead>
+      <tbody>
+        {p.analysis.map(([k, v]) => (
+          <tr key={k}><td>{k}</td><td>{v}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
   return (
     <>
       <section className="pdetail-hero">
@@ -42,7 +70,7 @@ export default function ProductDetail() {
           <Jug name={p.name.replace("Bi-on ", "")} sub={p.kind === "soil" ? t("prod.soil") : t("prod.foliar")} />
           <div>
             <h1>{p.name}</h1>
-            <p className="lead muted" style={{ fontSize: "1.2rem" }}>{tr(p.summary)}</p>
+            <p className="lead muted pd-lead">{tr(p.summary)}</p>
             <ul className="checks">
               {p.bullets.map((b) => (
                 <li key={b.en}>
@@ -65,39 +93,132 @@ export default function ProductDetail() {
 
       <section className="section">
         <div className="wrap">
-          <div className="tabs" role="tablist">
-            {tabs.map((id) => (
-              <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)}>
+          <div className="tabs" role="tablist" aria-label={p.name}>
+            {tabs.map((id, i) => (
+              <button
+                key={id}
+                ref={(el) => { tabRefs.current[i] = el; }}
+                type="button"
+                role="tab"
+                id={`tab-${id}`}
+                aria-controls="tab-panel"
+                aria-selected={tab === id}
+                tabIndex={tab === id ? 0 : -1}
+                onClick={() => setTab(id)}
+                onKeyDown={(e) => onTabKey(e, i)}
+              >
                 {t(`prod.tab.${id}` as Key)}
               </button>
             ))}
           </div>
 
           <div className="two">
-            <div role="tabpanel">
-              {(tab === "overview" || tab === "analysis") && (
+            <div role="tabpanel" id="tab-panel" aria-labelledby={`tab-${tab}`} tabIndex={0}>
+              {tab === "overview" && (
                 <>
-                  <h2>{tab === "overview" ? t("prod.tab.overview") : t("prod.analysis")}</h2>
-                  {tab === "overview" && <p>{tr(p.summary)}</p>}
-                  <table className="data">
-                    <thead>
-                      <tr><th>{t("prod.nutrient")}</th><th>{t("prod.content")}</th></tr>
-                    </thead>
-                    <tbody>
-                      {p.analysis.map(([k, v]) => (
-                        <tr key={k}><td>{k}</td><td>{v}</td></tr>
+                  <h2>{t("prod.tab.overview")}</h2>
+                  <p>{d ? tr(d.sub) : tr(p.summary)}</p>
+                  {d && d.ticks.length > 0 && (
+                    <ul className="ticks">
+                      {d.ticks.map((x) => (
+                        <li key={x.en}><span className="dot"><Icon name="check" /></span>{tr(x)}</li>
                       ))}
-                    </tbody>
-                  </table>
+                    </ul>
+                  )}
+                  {!d && simpleAnalysis}
                 </>
               )}
+
+              {tab === "analysis" && (
+                <>
+                  {/* Formula values, not yet a label guarantee (see prod.ga.note), so the heading avoids "Guaranteed". */}
+                  <h2>{d ? t("prod.tab.analysis") : t("prod.analysis")}</h2>
+                  {d ? (
+                    <div className="ga">
+                      <div className="ga-h">
+                        <b>{t("prod.ga.h")}</b>
+                        {d.ga.grade && <span>{t("prod.ga.grade")} <b>{d.ga.grade}</b></span>}
+                      </div>
+                      <table className="data">
+                        <thead>
+                          <tr>
+                            <th scope="col">{t("prod.nutrient")}</th>
+                            <th scope="col" className="n">{t("prod.ga.pct")}</th>
+                            <th scope="col" className="n">g/L</th>
+                            <th scope="col" className="n">lb/gal</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {d.ga.rows.map((r) => (
+                            <tr key={r.n.en}>
+                              <th scope="row">{tr(r.n)}</th>
+                              <td className="n">{r.pct}</td>
+                              <td className="n">{r.gl}</td>
+                              <td className="n">{r.lb}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      <div className="ga-f">
+                        {t("prod.ga.density")}: {d.ga.density}
+                        {d.ga.ph && <> · {t("prod.ga.ph")}: {d.ga.ph}</>}
+                      </div>
+                    </div>
+                  ) : simpleAnalysis}
+                  {d && <p className="note-text pd-notes">{t("prod.ga.note")}</p>}
+                </>
+              )}
+
               {tab === "applications" && (
                 <>
                   <h2>{t("prod.tab.applications")}</h2>
-                  <p>{t("prod.appsText")}</p>
-                  <Link to={ask} className="btn outline">{t("prod.band.cta")}</Link>
+                  {d ? (
+                    <>
+                      {d.how && <p><b>{t("prod.howto")}:</b> {tr(d.how)}</p>}
+                      {d.crops && <p><b>{t("prod.crops")}</b> {tr(d.crops)}</p>}
+                      {d.callouts && (
+                        <div className="grid c2 pd-block">
+                          {d.callouts.map((c) => (
+                            <div className="callout" key={c.v + c.t.en}><b>{c.v}</b><span>{tr(c.t)}</span></div>
+                          ))}
+                        </div>
+                      )}
+                      <div className="tablebox pd-block">
+                        <table className="data">
+                          <caption className="sr">{t("prod.rates")}</caption>
+                          <thead>
+                            <tr>
+                              <th scope="col">{t("prod.col.crop")}</th>
+                              <th scope="col">{t("prod.col.method")}</th>
+                              <th scope="col" className="n">{t("prod.col.lha")}</th>
+                              <th scope="col" className="n">{t("prod.col.acre")}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {d.rates.map((r, i) => (
+                              <tr key={i}>
+                                <td>{tr(r.crop)}{r.stage && <small>{tr(r.stage)}</small>}</td>
+                                <td>{tr(r.method)}</td>
+                                <td className="n">{r.lha}</td>
+                                <td className="n">{r.acre}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <ul className="ticks info pd-notes">
+                        {d.notes.map((n) => (
+                          <li key={n.en}><Icon name="info" />{tr(n)}</li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <p>{t("prod.appsText")}</p>
+                  )}
+                  <p className="pd-block"><Link to={ask} className="btn outline">{t("prod.band.cta")}</Link></p>
                 </>
               )}
+
               {tab === "compat" && (
                 <>
                   <h2>{t("prod.tab.compat")}</h2>
@@ -105,10 +226,18 @@ export default function ProductDetail() {
                   {p.bionTech && <Link to="/technology" className="link">{t("home.tech.cta")} <Icon name="arrow" /></Link>}
                 </>
               )}
+
               {tab === "trials" && (
                 <>
                   <h2>{t("prod.tab.trials")}</h2>
-                  <p>{t("prod.trialsText")}</p>
+                  {d?.trial ? (
+                    <>
+                      <h3>{t("prod.trial.h")}</h3>
+                      <p>{tr(d.trial)}</p>
+                    </>
+                  ) : (
+                    <p>{t("prod.trials.none").replace("{name}", p.name)}</p>
+                  )}
                   <Link to="/research" className="link">{t("prod.trialsLink")} <Icon name="arrow" /></Link>
                 </>
               )}
@@ -132,7 +261,7 @@ export default function ProductDetail() {
 
       <section className="section alt">
         <div className="wrap band">
-          <div className="img" style={{ backgroundImage: `url(${asset("hero-precision-ag.jpg")})` }} role="img" aria-label="" />
+          <div className="img" style={{ backgroundImage: `url(${asset("hero-precision-ag.webp")})` }} aria-hidden="true" />
           <div>
             <h2>{t("prod.band.h")}</h2>
             <p className="muted">{t("prod.band.d")}</p>

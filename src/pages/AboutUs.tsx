@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useI18n, type Key } from "../i18n";
+import { usePageTitle } from "../lib/usePageTitle";
 import { asset } from "../data/nav";
 import Icon, { type IconName } from "../components/ui/Icon";
 import Reveal from "../components/ui/Reveal";
@@ -13,6 +14,7 @@ const values: [IconName, Key, Key][] = [
 
 export default function AboutUs() {
   const { t } = useI18n();
+  usePageTitle(t("nav.about"));
   return (
     <>
       <section className="page-head">
@@ -25,7 +27,7 @@ export default function AboutUs() {
 
       <section className="section">
         <div className="wrap band">
-          <div className="img" style={{ backgroundImage: `url(${asset("about-vineyard-rows.jpg")})`, minHeight: 340 }} role="img" aria-label="" />
+          <div className="img" style={{ backgroundImage: `url(${asset("about-vineyard-rows.webp")})`, minHeight: 340 }} aria-hidden="true" />
           <Reveal>
             <h2>{t("about.h")}</h2>
             <span className="swoosh" />

@@ -1,5 +1,7 @@
+import { useEffect, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
+import { usePageTitle } from "../lib/usePageTitle";
 import { asset } from "../data/nav";
 import Icon, { type IconName } from "../components/ui/Icon";
 import Reveal from "../components/ui/Reveal";
@@ -11,12 +13,39 @@ const features: { icon: IconName; t: "home.f1.t" | "home.f2.t" | "home.f3.t" | "
   { icon: "compass", t: "home.f4.t", d: "home.f4.d" },
 ];
 
+// Phones get a portrait crop; must match the 900px breakpoint in app.css and the preloads in index.html.
+const HERO = asset("hero-crop-field.webp");
+const HERO_M = asset("hero-crop-field-m.webp");
+const MOBILE = "(max-width: 900px)";
+
+// The text entrance plays once per visit, not every time the visitor comes back to Home.
+let introPlayed = false;
+
 export default function Home() {
   const { t } = useI18n();
+  usePageTitle();
+  const [intro] = useState(() => !introPlayed);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    introPlayed = true;
+    // Start the fade and zoom only once the photo is downloaded and decoded (off the main thread),
+    // so the motion never begins on an empty layer or stutters while the image decodes.
+    let alive = true;
+    const img = new Image();
+    img.src = window.matchMedia(MOBILE).matches ? HERO_M : HERO;
+    const done = () => alive && setReady(true);
+    img.decode().then(done, done);
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   return (
     <>
-      <section className="hero">
-        <div className="hero-bg" style={{ backgroundImage: `url(${asset("hero-crop-field.jpg")})` }} aria-hidden="true" />
+      <section className={`hero${ready ? " ready" : ""}${intro ? " intro" : ""}`}>
+        <div className="hero-bg" style={{ "--hero": `url(${HERO})`, "--hero-m": `url(${HERO_M})` } as CSSProperties} aria-hidden="true" />
+        <span className="hero-cue" aria-hidden="true"><Icon name="chev" /></span>
         <div className="wrap">
           <div className="copy">
             <h1>{t("home.title")}</h1>
@@ -77,7 +106,7 @@ export default function Home() {
           <Reveal>
             <div className="grid c2" style={{ marginTop: 32 }}>
               <Link to="/products?type=foliar" className="card">
-                <div className="media" style={{ backgroundImage: `url(${asset("hero-precision-ag.jpg")})` }} />
+                <div className="media" style={{ backgroundImage: `url(${asset("hero-precision-ag.webp")})` }} />
                 <div className="solution">
                   <Icon name="leaf" className="big" />
                   <div>
@@ -88,7 +117,7 @@ export default function Home() {
                 </div>
               </Link>
               <Link to="/products?type=soil" className="card">
-                <div className="media" style={{ backgroundImage: `url(${asset("about-vineyard-rows.jpg")})` }} />
+                <div className="media" style={{ backgroundImage: `url(${asset("about-vineyard-rows.webp")})` }} />
                 <div className="solution">
                   <Icon name="layers" className="big" />
                   <div>
@@ -106,7 +135,7 @@ export default function Home() {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <Reveal>
-            <div className="banner" style={{ backgroundImage: `url(${asset("hero-precision-ag.jpg")})` }}>
+            <div className="banner" style={{ backgroundImage: `url(${asset("hero-precision-ag.webp")})` }}>
               <div className="inner">
                 <span className="eyebrow">{t("res.eyebrow")}</span>
                 <h2>{t("res.title")}</h2>

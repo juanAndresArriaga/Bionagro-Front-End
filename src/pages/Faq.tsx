@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useI18n, type Key } from "../i18n";
+import { usePageTitle } from "../lib/usePageTitle";
 
 const items = [1, 2, 3, 4, 5] as const;
 
 export default function Faq() {
   const { t } = useI18n();
+  usePageTitle(t("nav.faq"));
   return (
     <>
       <section className="page-head">

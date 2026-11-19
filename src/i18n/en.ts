@@ -256,4 +256,11 @@ export const en = {
   "quick.ok": "Thanks! We will contact you soon.",
   "quick.close": "Close",
   "quick.full": "Need more options? Use the full form",
+  "form.error": "We couldn't send your request. Please try again, or send it directly:",
+  "form.mail": "Send by email",
+  "form.sms": "Send by text message",
+  "form.sending": "Sending…",
+  "nav.productsMenu": "Product menu",
+  "prod.rates": "Application rates",
+  "prod.trial.h": "Field trial",
 };

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
+import { usePageTitle } from "../lib/usePageTitle";
 import { asset } from "../data/nav";
 import { hardness, howCards, nutrients, refs } from "../data/technology";
 import Icon from "../components/ui/Icon";
@@ -103,6 +104,7 @@ function Lab() {
 
 export default function Technology() {
   const { t, tr } = useI18n();
+  usePageTitle(t("nav.tech"));
   return (
     <>
       <section className="tx-open">

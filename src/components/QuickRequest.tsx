@@ -2,8 +2,9 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n";
 import { products } from "../data/products";
-import { sendRequest } from "../lib/sendRequest";
+import { fallbackHref, sendRequest } from "../lib/sendRequest";
 import Icon from "./ui/Icon";
+import Field from "./ui/Field";
 
 /** Floating "Contact us" button that opens a three-field pop-up: name, phone, optional product. */
 export default function QuickRequest() {
@@ -12,7 +13,7 @@ export default function QuickRequest() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [product, setProduct] = useState("");
-  const [state, setState] = useState<"idle" | "busy" | "done">("idle");
+  const [state, setState] = useState<"idle" | "busy" | "done" | "error">("idle");
 
   const navigate = useNavigate();
   const open = () => {
@@ -32,22 +33,22 @@ export default function QuickRequest() {
     return () => d.removeEventListener("click", onClick);
   }, []);
 
+  // The message goes to the Bionagro team, so it stays in English whatever the site language.
+  const intro = `Hi Bionagro, I want to become a partner${product ? ` with ${product}` : ""}.`;
+  const body = [intro, `Name: ${name}`, `Phone: ${phone}`].join("\n");
+  const subject = `Partner request: ${name}`;
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (state === "busy") return;
     setState("busy");
-    const intro = `Hi Bionagro, I want to become a partner${product ? ` with ${product}` : ""}.`;
-    const body = [intro, `Name: ${name}`, `Phone: ${phone}`].join("\n");
-    try {
-      const r = await sendRequest("quick-popup", { name, phone, product }, `Partner request: ${name}`, body, "sms");
-      setState(r === "sent" ? "done" : "idle");
-      if (r === "sent") {
-        setName("");
-        setPhone("");
-        setProduct("");
-      }
-    } catch {
-      setState("idle");
+    const r = await sendRequest("quick-popup", { name, phone, product }, subject, body, "sms");
+    if (r === "sent") {
+      setName("");
+      setPhone("");
+      setProduct("");
     }
+    setState(r === "sent" ? "done" : r === "error" ? "error" : "idle");
   };
 
   return (
@@ -70,23 +71,28 @@ export default function QuickRequest() {
           <form onSubmit={onSubmit}>
             <h2 id="quick-h">{t("quick.title")}</h2>
             <p className="muted">{t("quick.d")}</p>
-            <label className="field">
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("quick.name")} aria-label={t("quick.name")} autoComplete="name" required />
-            </label>
-            <label className="field">
-              <Icon name="phone" />
-              <input type="tel" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("quick.phone")} aria-label={t("quick.phone")} autoComplete="tel" required />
-            </label>
-            <label className="field select">
-              <select value={product} onChange={(e) => setProduct(e.target.value)} aria-label={t("quick.product")}>
-                <option value="">{t("quick.product")}</option>
+            <Field label={t("quick.name")}>
+              <input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
+            </Field>
+            <Field label={t("quick.phone")} icon="phone">
+              <input type="tel" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" required />
+            </Field>
+            <Field label={t("quick.product")} select>
+              <select value={product} onChange={(e) => setProduct(e.target.value)}>
+                <option value="">—</option>
                 {products.map((p) => <option key={p.slug} value={p.name}>{p.name}</option>)}
               </select>
-            </label>
+            </Field>
+            {state === "error" && (
+              <p className="note err" role="alert">
+                <Icon name="info" />
+                <span>{t("form.error")} <a className="link" href={fallbackHref("sms", subject, body)}>{t("form.sms")}</a></span>
+              </p>
+            )}
             <button type="submit" className="btn block" disabled={state === "busy"}>
-              {t("quick.send")} <Icon name="arrow" />
+              {state === "busy" ? t("form.sending") : <>{t("quick.send")} <Icon name="arrow" /></>}
             </button>
-            <p className="tiny muted" style={{ margin: "12px 0 0" }}>
+            <p className="tiny muted mt-12">
               <Link to="/contact" onClick={close} className="link">{t("quick.full")}</Link>
             </p>
           </form>

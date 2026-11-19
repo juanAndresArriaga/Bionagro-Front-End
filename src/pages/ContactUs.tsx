@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n";
+import { usePageTitle } from "../lib/usePageTitle";
 import { contactInfo, socialLinks } from "../data/nav";
 import { products } from "../data/products";
 import Icon from "../components/ui/Icon";
@@ -7,6 +8,7 @@ import RequestForm from "../components/RequestForm";
 
 export default function ContactUs() {
   const { t } = useI18n();
+  usePageTitle(t("nav.contact"));
   const [params] = useSearchParams();
   const product = params.get("product") ?? "";
   const intent = params.get("intent");

@@ -73,7 +73,7 @@ p { margin: 0 0 1em; }
 .nav a:hover, .nav .dd > button:hover { color: var(--botanical); }
 .dd { position: relative; }
 .dd-menu { position: absolute; top: 100%; left: -16px; min-width: 230px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow); padding: 8px; display: none; }
-.dd:hover .dd-menu, .dd:focus-within .dd-menu { display: block; }
+.dd:hover .dd-menu { display: block; }
 .dd-menu a { display: block; padding: 10px 14px !important; border-radius: 8px; }
 .dd-menu a:hover { background: var(--ivory); }
 .dd-menu a.active::after { display: none; }
@@ -90,15 +90,28 @@ p { margin: 0 0 1em; }
   .nav a, .nav .dd > button { padding: 14px 0; border-bottom: 1px solid var(--line); width: 100%; }
   .nav a.active::after { display: none; }
   .dd-menu { position: static; display: block; border: 0; box-shadow: none; padding: 0 0 0 12px; }
+  .nav .dd > .dd-toggle { display: none; }
   .nav .btn.mobile-cta { display: inline-flex; margin-top: 16px; color: #fff; padding: 13px 24px; width: 100%; }
 }
 @media (min-width: 1181px) { .nav .mobile-cta { display: none !important; } }
 
 /* ---------- Hero ---------- */
 .hero { position: relative; background: #dfe6d6; overflow: hidden; }
-.hero-bg { position: absolute; inset: 0; background: center/cover no-repeat; transform-origin: 70% 60%; animation: field-in 24s ease-out both; will-change: transform; }
+.hero-bg { position: absolute; inset: 0; background: var(--hero) center/cover no-repeat; transform-origin: 70% 60%; opacity: 0; transition: opacity .8s ease-out; }
+/* The zoom starts only once Home.tsx has decoded the photo (.ready), so it never begins on an empty layer. */
+.hero.ready .hero-bg { opacity: 1; animation: field-in 24s ease-out both; will-change: transform; }
 @keyframes field-in { from { transform: scale(1); } to { transform: scale(1.18); } }
-@keyframes field-in-m { from { transform: scale(1); } to { transform: scale(1.25); } }
+@keyframes field-in-m { from { transform: scale(1); } to { transform: scale(1.12); } }
+/* First-visit entrance: text rises in one line after another; transform/opacity only, so it stays on the GPU. */
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+@keyframes draw { from { transform: scaleX(0); } }
+.hero.intro .copy > * { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+.hero.intro .copy > :nth-child(2) { animation: draw .6s cubic-bezier(.2,.7,.2,1) .1s both; transform-origin: left; }
+.hero.intro .copy > :nth-child(3) { animation-delay: .18s; }
+.hero.intro .copy > :nth-child(4) { animation-delay: .26s; }
+.hero.intro .copy > :nth-child(5) { animation-delay: .34s; }
+.hero-cue { display: none; }
+@keyframes bob { 50% { transform: translate(-50%, 6px); } }
 .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(246,245,239,.96) 0%, rgba(246,245,239,.85) 42%, rgba(246,245,239,.1) 100%); }
 .hero .wrap { position: relative; z-index: 2; padding: 96px 0 104px; }
 .hero .copy { max-width: 600px; }
@@ -108,10 +121,14 @@ p { margin: 0 0 1em; }
 .hero .trust span { display: inline-flex; gap: 8px; align-items: center; }
 .hero.split .wrap { display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; align-items: center; }
 @media (max-width: 900px) {
-  .hero { min-height: 560px; display: flex; }
+  /* Fill exactly the first screen under the header (76px bar + 1px border); svh ignores the mobile address bar. */
+  .hero { min-height: calc(100vh - 77px); min-height: calc(100svh - 77px); display: flex; }
   .hero::before { background: linear-gradient(180deg, rgba(246,245,239,.94) 0%, rgba(246,245,239,.88) 70%, rgba(246,245,239,.45) 100%); }
-  .hero-bg { transform-origin: 50% 70%; animation: field-in-m 16s ease-out both; }
-  .hero .wrap { padding: 56px 0 64px; }
+  .hero-bg { background-image: var(--hero-m); transform-origin: 50% 70%; }
+  .hero.ready .hero-bg { animation: field-in-m 20s ease-out both; }
+  .hero .wrap { padding: 32px 0 80px; display: flex; flex-direction: column; justify-content: center; }
+  .hero .copy { width: 100%; }
+  .hero-cue { display: grid; place-items: center; position: absolute; z-index: 2; left: 50%; bottom: 20px; width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid rgba(18,61,45,.35); color: var(--forest); background: rgba(246,245,239,.6); transform: translateX(-50%); animation: bob 1.8s ease-in-out 1.2s infinite; }
   .hero .trust { color: var(--forest); }
   .hero.split .wrap { grid-template-columns: 1fr; }
 }
@@ -479,4 +496,83 @@ table.data td small { display: block; color: var(--muted); }
 .quick h2 { font-size: 1.5rem; margin-bottom: 6px; padding-right: 36px; }
 .quick-x { position: absolute; top: 12px; right: 12px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: #fff; display: grid; place-items: center; cursor: pointer; color: var(--forest); }
 .quick-ok { text-align: center; display: grid; justify-items: center; gap: 8px; padding: 10px 0; }
-.quick .btn:disabled { opacity: .6; cursor: wait; }
+.btn:disabled { opacity: .6; cursor: wait; }
+
+/* ---------- Form labels, errors, utilities ---------- */
+.fld { display: block; margin: 14px 0; }
+.fld-l { display: block; font-weight: 700; font-size: .88rem; color: var(--forest); }
+.fld .field { margin: 6px 0 0; }
+.note.err { background: #fbe9e7; color: #7a2418; align-items: flex-start; }
+.note.err .link { color: inherit; text-decoration: underline; }
+.mt-12 { margin: 12px 0 0; }
+.nav .dd > .dd-toggle { padding-left: 2px; padding-right: 2px; }
+.dd.open .dd-menu { display: block; }
+.dd-toggle[aria-expanded="true"] .ico { transform: rotate(180deg); }
+.data caption { text-align: left; font-weight: 800; color: var(--forest); padding: 0 0 10px; }
+.pd-block { margin-top: 32px; }
+.pd-notes { margin-top: 24px; }
+.pd-lead { font-size: 1.2rem; }
+
+/* ---------- Mobile pass (phones; desktop layout is untouched above 640px except where noted) ---------- */
+.ticks-row small { font-size: .75rem; }
+.chat { bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+
+@media (max-width: 1180px) {
+  /* Header controls reach the 44px minimum tap size. */
+  .lang button { min-width: 44px; min-height: 44px; }
+  .burger { width: 44px; height: 44px; justify-content: center; align-items: center; }
+}
+
+@media (max-width: 640px) {
+  .section { padding: 48px 0; }
+  .page-head { padding: 40px 0 36px; }
+  .cta-band { padding: 26px 20px; }
+
+  /* Product list: compact rows (thumbnail left, text right) instead of a full-screen card each. */
+  .grid.c3:has(.pcard) { gap: 12px; }
+  .pcard { display: grid; grid-template-columns: 88px 1fr; column-gap: 14px; row-gap: 6px; padding: 14px; align-items: start; }
+  .pcard > .jug { grid-row: 1 / span 5; aspect-ratio: 3 / 4; }
+  .pcard > .jug svg { width: 84%; }
+  .pcard > :not(.jug) { grid-column: 2; }
+  .pcard h3 { font-size: 1.15rem; margin: 0; }
+  .pcard p { font-size: .88rem; }
+  .pcard > .link { justify-self: start; }
+
+  /* Product page: smaller jug, equal-width actions, tabs as wrapping pills so all five are visible. */
+  .pdetail-hero .wrap { padding: 20px 0 32px; gap: 4px; }
+  .pdetail-hero .jug svg { width: 150px; }
+  .pdetail-hero .btn-row .btn { flex: 1 1 0; padding: 13px 10px; }
+  .tabs { flex-wrap: wrap; overflow: visible; border-bottom: 0; gap: 8px; margin-bottom: 24px; }
+  .tabs button { border: 1px solid var(--line); border-radius: 999px; background: #fff; padding: 10px 16px; margin: 0; min-height: 44px; }
+  .tabs button[aria-selected="true"] { background: var(--forest); border-color: var(--forest); color: #fff; }
+
+  /* Forms and section navigation. */
+  .pick button, .sec-nav button { min-height: 44px; }
+}
+
+@media (max-width: 520px) {
+  /* Full-width stacked actions on the home hero and product hero. */
+  .hero .actions .btn, .pdetail-hero .btn-row .btn { flex: 1 1 100%; }
+
+  /* Home features: 2x2 grid instead of four full-width rows. */
+  .strip:not(.soft) .wrap:not(.three) { grid-template-columns: 1fr 1fr; }
+  .strip:not(.soft) .wrap:not(.three) .item { padding: 22px 10px; border-top: 1px solid var(--line); border-left: 0; }
+  .strip:not(.soft) .wrap:not(.three) .item:nth-child(-n+2) { border-top: 0; }
+  .strip:not(.soft) .wrap:not(.three) .item:nth-child(even) { border-left: 1px solid var(--line); }
+  .strip:not(.soft) .item .ico.big { width: 32px; height: 32px; }
+  .strip:not(.soft) h3 { font-size: 1rem; }
+  .strip:not(.soft) p { font-size: .82rem; }
+
+  /* Footer: brand and contact span the width; Explore and Follow sit side by side. Extra bottom room for the chat button. */
+  .footer { padding: 48px 0 88px; }
+  .footer .cols { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
+  .footer .cols > :first-child, .footer .cols > :nth-child(3) { grid-column: 1 / -1; }
+  .footer .cols > :nth-child(3) { order: 3; }
+  .footer ul { gap: 2px; }
+  .footer ul a { display: inline-block; padding: 9px 0; }
+  .footer .legal { margin-top: 28px; }
+}
+
+/* Below-the-fold photos inside <Reveal> download only when their section scrolls into view,
+   so they don't compete with the hero photo on first load. */
+.reveal:not(.in) [style*="background-image"] { background-image: none !important; }

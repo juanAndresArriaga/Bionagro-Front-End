@@ -1,4 +1,5 @@
 import { useI18n } from "../i18n";
+import { usePageTitle } from "../lib/usePageTitle";
 import { contactInfo, socialLinks } from "../data/nav";
 import { hero, perks, plant, privateLabel, steps } from "../data/distributors";
 import Icon from "../components/ui/Icon";
@@ -7,6 +8,7 @@ import Reveal from "../components/ui/Reveal";
 
 export default function Distributors() {
   const { t, tr } = useI18n();
+  usePageTitle(t("nav.distributor"));
 
   return (
     <>

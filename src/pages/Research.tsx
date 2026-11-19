@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
+import { usePageTitle } from "../lib/usePageTitle";
 import { asset } from "../data/nav";
 import { close, hero, jar, lemon, refs, sections, statusLabel, statusOne, studies, type Status } from "../data/science";
 import Icon from "../components/ui/Icon";
@@ -75,6 +76,7 @@ function Jars() {
 
 export default function Research() {
   const { t, tr } = useI18n();
+  usePageTitle(t("nav.research"));
   const [filter, setFilter] = useState<"all" | Status>("all");
   const [sec, setSec] = useState("lemon");
   const go = (id: string) => {

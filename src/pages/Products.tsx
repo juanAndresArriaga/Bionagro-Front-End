@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n";
+import { usePageTitle } from "../lib/usePageTitle";
 import { products, type ProductKind } from "../data/products";
 import Icon from "../components/ui/Icon";
 import Jug from "../components/ui/Jug";
@@ -12,6 +13,7 @@ const filters = [
 
 export default function Products() {
   const { t, tr } = useI18n();
+  usePageTitle(t("nav.products"));
   const [params, setParams] = useSearchParams();
   const raw = params.get("type");
   const active: "all" | ProductKind = raw === "foliar" || raw === "soil" ? raw : "all";

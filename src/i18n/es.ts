@@ -258,4 +258,11 @@ export const es: Record<keyof typeof en, string> = {
   "quick.ok": "¡Gracias! Le contactaremos pronto.",
   "quick.close": "Cerrar",
   "quick.full": "¿Necesita más opciones? Use el formulario completo",
+  "form.error": "No pudimos enviar su solicitud. Intente de nuevo o envíela directamente:",
+  "form.mail": "Enviar por correo",
+  "form.sms": "Enviar por mensaje de texto",
+  "form.sending": "Enviando…",
+  "nav.productsMenu": "Menú de productos",
+  "prod.rates": "Dosis de aplicación",
+  "prod.trial.h": "Ensayo de campo",
 };
